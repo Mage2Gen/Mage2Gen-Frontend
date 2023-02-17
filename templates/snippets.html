@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Snippets{% endblock %}
+{% block description %}Index and description of used Mage2Gen snippets{% endblock %}
+
+{% block content %}
+<div class="col-lg-6 col-centered">
+
+	<h1 id="index">Index</h1>
+	<ul>
+		{% for snippet in snippets %}
+			<li>
+				<a class="scrollTo" href="#snippet-{{snippet.name}}">{{snippet.label}}</a>
+			</li>
+		{% endfor %}
+	</ul>
+
+
+	{% for snippet in snippets %}
+		<a href="{% url 'snippet' snippet.name|lower %}"><h2 id="snippet-{{snippet.name}}">{{snippet.label}}</h2></a>
+		<hr/>
+		<div class="snippet-description">
+			{{snippet.description|safe}}
+		</div>
+		<a class="scrollTo" href="#index">Back to top</a>
+	{% endfor %}
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('.scrollTo').click(function() {
+			var target = $(this).attr('href');
+			$("html, body").animate({ scrollTop: $(target).offset().top }, 500);
+			return false;
+		});
+	});
+
+</script>
+{% endblock %}

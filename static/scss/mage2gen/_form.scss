@@ -1,0 +1,35 @@
+.field-input {
+	transition: width 0.3s;
+}
+
+.form-group.remove {
+	text-align: right;
+	
+	.btn.remove {
+		margin-top: 25px;
+	}
+}
+
+.snippet-fields,
+.snippet-fields-extra {
+	label {
+		display: inline-block;
+		width:100%;
+
+		&.checkbox-label {
+			vertical-align: top;
+    		line-height: 34px;
+    		font-weight: normal;
+    		margin-bottom: 0;
+    		width: auto;
+		}
+	}
+
+	input[type="checkbox"] {
+		display: inline-block;
+    	height: 34px;
+    	margin: 0;
+    	vertical-align: top;
+	}
+
+}

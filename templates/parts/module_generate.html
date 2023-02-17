@@ -1,0 +1,560 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<main class="col-md-8">
+
+  <form method="post" id="mage2gen-form">
+
+
+
+    <div class="row utilities">
+      <div class="col-xs-12">
+        <div class="input-group form-search">
+          <input class="form-control search-query" type="text" placeholder="Search for snippet">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary search" data-type="last">Search</button>
+          </span>
+        </div>
+      </div>
+
+      <!-- <div class="col-xs-6">
+        <div class="input-group form-filter">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary filter" data-type="last">Filter</button>
+          </span>
+        </div>
+      </div> -->
+
+    </div>
+
+    {% csrf_token %}
+    <div id="mag2gen-container"></div>
+  </form>
+
+  <div class="well well-lg">
+      <h4>Coming soon!</h4>
+      <ul class="list-group">
+        <li class="list-group-item"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> GraphQl UrlResolver</li>
+        <li class="list-group-item"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Category Attribute through Patch</li>
+        <li class="list-group-item"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Webapi Async/ Bulk</li>
+        <li class="list-group-item"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Custom Total</li>
+        <li class="list-group-item"><span class="glyphicon glyphicon-flash" aria-hidden="true"></span> Easy Email <br><i>currently 'System / Config / Setting' Snippet with field type 'select' and source model 'Email Template'</i></li>
+      </ul>
+    </div>
+</main>
+
+<aside id="code-sidebar" class="col-md-4">
+
+  <!--<summary class="panel panel-default">-->
+    <!--<div class="panel-heading">-->
+      <!--<h1 class="panel-title">Mage2gen online Magento 2 module creator</h1>-->
+    <!--</div>-->
+    <!--<div class="panel-body">-->
+    <!--<p>-->
+      <!--Use the Mage2gen Magento 2 module creator to generate basic Magento 2 Modules and code snippets.-->
+      <!--You can also use the <a href="/commandline">commandline tool to interactively create a Magento 2 module</a>.-->
+    <!--</p>-->
+    <!--<p>If you have any suggestions for extra snippets or if you find any bugs in the Mage2gen Magento 2 Module creator. Please let us know.  Contact us and send an email to <a href="mailto:feedback@mage2gen.com">feedback@mage2gen.com</a></p>-->
+      <!--</div>-->
+  <!--</summary>-->
+
+  <div id="code-generation" class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">General<br/></h1>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label>Generate module for:</label>
+          <select id="magento-generate-version" class="form-control" autocomplete="off">
+            {% for version in versions %}
+              <option value="{{version}}" {% if version == selected_version%}selected{% endif %}>
+                Magento 2.{{version}}{% if version == 4%}{% else %} (EOL){% endif %}
+              </option>
+            {% endfor %}
+          </select>
+      </div>
+
+      <button class="btn btn-secondary btn-block create-new-module" onClick="reset()">Create new module</button>
+      <button class="btn btn-secondary btn-block generate" onclick="generate();">Generate</button>
+      <button class="btn btn-primary btn-block save-and-download magento-version-{{selected_version}}"  type="submit" id="mage2gen-form-submit-src" name="submit">Save and download PWA Package Files</button>
+      <button class="btn btn-success btn-block save-and-download" type="submit" id="mage2gen-form-submit-module" name="submit">Save and download Module</button>
+      </div>
+  </div>
+
+  <div id="modules" class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">Previous saved Magento 2 modules
+        {% if user.is_authenticated %}
+          <a id="module-show-toggle" href="#" onclick="toggleModules(); return false;">(show)</a>
+          <span id="previous-saved-modules-count" class="badge" style="float:right"></span>
+        {% endif %}
+      </h2>
+    </div>
+    <div class="panel-body" id="previous-saved-modules">
+      {% if not user.is_authenticated %}
+        Login to save and load generated modules.
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="sign-in-google btn">
+          <span class="icons-google"><img src="{% static 'img/google.svg' %}" /></span>
+          Sign in with Google
+        </a>
+      {% endif %}
+      </div>
+  </div>
+
+  <div id="code-navigation" class="panel panel-default">
+    <div class="panel-heading">
+      <h2 class="panel-title">Preview Magento 2 module</h2>
+    </div>
+    <div class="panel-body">
+      <p>Generated files <i>(click a file to view its contents. Live reloads)</i></p>
+      <pre>
+          <div id="code-jstree"></div>
+      </pre>
+      </div>
+  </div>
+
+  <div class="panel panel-default" id="banner">
+      <a href="https://www.experius.nl/werken-bij" target="_blank">
+          <div class="content-one">
+              <img src="{% static 'img/experius-banner-1.jpg' %}" alt="Experius Ad"/>
+          </div>
+          <div class="content-two">
+              <img src="{% static 'img/experius-banner-2.jpg' %}" alt="Experius Ad"/>
+          </div>
+      </a>
+  </div>
+</aside>
+
+<aside id="code-preview" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</span></button>
+        <h4 class="modal-title" id="mage2-selected-file-name">Filename</h4>
+      </div>
+      <div class="modal-body">
+        <div class="clearfix">
+          <div class="col-md-3" id="modal-sidebar-filetree">
+
+          </div>
+          <div class="col-md-9" id="modal-file-content">
+            <a class="btn btn-default copy-file-path-button pull-left">
+              <span class="glyphicon glyphicon-ok" style="display: none;" aria-hidden="true"></span>
+              Copy file path to clipboard
+            </a>
+            <a class="btn btn-default copy-button pull-right">
+              <span class="glyphicon glyphicon-ok" style="display: none;" aria-hidden="true"></span>
+              Copy to clipboard
+            </a>
+            <pre class="generated-code">
+              <code id="mage2-selected-file" class="php copy-target"></code>
+            </pre>
+          </div>
+        </div><!-- /.modal-body -->
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</aside>
+
+
+<!-- Download Module pop modal -->
+<div class="modal fade" id="download-module-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        <h4 class="modal-title">Download Magento 2 Module</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Method 1 - Direct download</h5>
+        <p>
+          Download your generated module here: <br/>
+          <a id='zip-download-module-link' class="btn btn btn-success btn-download-generated-module clearfix" href="">Download generated module</a>
+
+          <span class="button-separator">or</span>
+          <a class="bmc-button clearfix" target="_blank" href="https://www.buymeacoffee.com/7mGzHeOQE"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Download me a coffee "><span style="margin-left:5px">Download me a coffee</span></a>
+        </p>
+        <hr/>
+        <h5>Method 2 - Download and Extract command</h5>
+        <p>Or download and extract the module in the root of you project folder with curl:</p>
+
+        <pre id="tar-curl-download-module">
+          mkdir -p app/code &amp;&amp; curl https://mage2gen.com/download/module/latest.tar | tar xzCk app/code
+        </pre>
+
+        <p>If curl is not installed, the wget version:</p>
+
+        <pre id="tar-wget-download-module">
+          wget https://mage2gen.com/download/module/latest.tar &amp;&amp; mkdir -p app/code &amp;&amp; tar xzfk latest.tar -C app/code &amp;&amp; rm latest.tar
+        </pre>
+        <hr/>
+        <h5>Github</h5>
+        <p>
+          If you like Mage2Gen, please star or fork the project on Github.
+        </p>
+        <div>
+      <a aria-label="Star mage2gen/Mage2Gen on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/mage2gen/Mage2Gen#stargazers_count" data-count-href="/mage2gen/Mage2Gen/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/mage2gen/Mage2Gen" class="github-button">Star</a>
+      <a aria-label="Fork mage2gen/Mage2Gen on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/mage2gen/Mage2Gen#forks_count" data-count-href="/mage2gen/Mage2Gen/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/mage2gen/Mage2Gen/fork" class="github-button">Fork</a>
+        </div>
+
+        <hr/>
+        <h5>Mage2Gen share link</h5>
+        <p>
+          <pre id="share-module-link"></pre>
+        </p>
+
+        <hr/>
+        <h5>Tweet your module!</h5>
+        <p>
+          Tweet the download link to your module directly!
+        </p>
+        <div id="tweet-container-module"></div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Download Module pop modal -->
+
+<!-- Download Components pop modal -->
+<div class="modal fade" id="download-src-modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+        <h4 class="modal-title">Download Magento 2 Package Source Files for PWA Studio</h4>
+      </div>
+      <div class="modal-body">
+        <h5>Method 1 - Direct download</h5>
+        <p>
+          Download your generated src here: <br/>
+          <a id='zip-download-src-link' class="btn btn btn-success btn-download-generated-module clearfix" href="">Download generated src</a>
+
+          <span class="button-separator">or</span>
+          <a class="bmc-button clearfix" target="_blank" href="https://www.buymeacoffee.com/7mGzHeOQE"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Download me a coffee "><span style="margin-left:5px">Download me a coffee</span></a>
+        </p>
+        <hr/>
+        <h5>Method 2 - Download and Extract command</h5>
+        <p>Or download and extract the package source files in your theme package:</p>
+        <p>Go to your package-root</p>
+        <p>
+        <ul>
+          <li>
+            <i>npm init @magento/pwa</i> <br /><b>cd &#60;project root&#62;</b></i>
+          </li>
+          <li>
+            <i>clone from https://github.com/magento/pwa-studio</i> <br /><b>cd &#60;project-root&#62;/packages/venia-ui/<br />note: change src directory to lib for latest version support</b>
+          </li>
+          <li>
+            <i>clone from https://github.com/Jordaneisenburger/fallback-studio</i> <br /><b>cd &#60;project-root&#62;/src/example-company/example-shop/</b>
+          </li>
+        </ul>
+        </p>
+
+        <pre id="tar-curl-download-src">
+          curl https://mage2gen.com/download/scr/latest.tar | tar xzCk .
+        </pre>
+
+        <p>If curl is not installed, the wget version:</p>
+
+        <pre id="tar-wget-download-src">
+          wget https://mage2gen.com/download/src/latest.tar &amp;&amp; tar xzfk latest.tar &amp;&amp; rm latest.tar
+        </pre>
+        <hr/>
+        <h5>Github</h5>
+        <p>
+          If you like Mage2Gen, please star or fork the project on Github.
+        </p>
+        <div>
+      <a aria-label="Star mage2gen/Mage2Gen on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/mage2gen/Mage2Gen#stargazers_count" data-count-href="/mage2gen/Mage2Gen/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/mage2gen/Mage2Gen" class="github-button">Star</a>
+      <a aria-label="Fork mage2gen/Mage2Gen on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/mage2gen/Mage2Gen#forks_count" data-count-href="/mage2gen/Mage2Gen/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/mage2gen/Mage2Gen/fork" class="github-button">Fork</a>
+        </div>
+
+        <hr/>
+        <h5>Mage2Gen share link</h5>
+        <p>
+          <pre id="share-src-link"></pre>
+        </p>
+
+        <hr/>
+        <h5>Tweet your module!</h5>
+        <p>
+          Tweet the download link to your module directly!
+        </p>
+        <div id="tweet-container-src"></div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Download Components pop modal -->
+
+
+<script type="text/javascript">
+  var gen = null;
+  var fileTree = null;
+  var user_modules = null;
+  var currentMainVersion = {{selected_version}};
+  var downloadType = null;
+
+  function loadUserModules(){
+    csrfmiddlewaretoken = Cookies.get('csrftoken');
+    $.get('/user/modules/', {csrfmiddlewaretoken: csrfmiddlewaretoken}, function(data) {
+      if(data.status == 'success'){
+        user_modules = data.data;
+        var container = $('#previous-saved-modules');
+        $('#previous-saved-modules-count').html(user_modules.length);
+        container.html('');
+
+        if(user_modules.length > 4){
+          $('#module-show-toggle').show();
+        } else {
+          $('#module-show-toggle').hide();
+        }
+
+        $.each(user_modules, function(index, row){
+
+          var div = $('<div class="col-md-6">');
+          if(index >= 4){
+            div.css('display', 'none');
+            // div.addClass('hide');
+          }
+
+          var a = $('<a href="#">');
+          a.html(row['package_name'] + '/' + row['name']);
+          a.click(function(){
+            if(gen.hasSnippetData() && !gen.validate(false)){
+              gen.validate();
+              return;
+            }
+
+            delay = 0
+            if(gen.hasSnippetData()){
+              $(gen.renderers).each(function(index, renderer){
+                renderer.panelDiv.collapse('hide');
+              });
+              delay = 200;
+
+              // Save module
+              var data = gen.getData();
+                csrfmiddlewaretoken = Cookies.get('csrftoken');
+
+                module_id = Cookies.get('mage2gen_module_id');
+
+                url = '/save/';
+                if(typeof(module_id) !== 'undefined'){
+                  url += module_id + '/';
+                }
+                $.post(url, {csrfmiddlewaretoken: csrfmiddlewaretoken, 'mage2gen-data': JSON.stringify(data)}, function(data){});
+                // end save
+            }
+
+            setTimeout(function(){
+              Cookies.set('mage2gen_module_id', row['id'], { expires: 30 });
+              gen.render();
+              gen.setData(row['config']);
+              loadUserModules();
+              }, delay);
+          });
+
+          div.append(a);
+          container.append(div);
+
+        });
+      }
+    });
+  }
+
+  function toggleModules(){
+    $('#previous-saved-modules').find('div').each(function(index, div){
+      if(index >= 4){
+        $(div).slideToggle('0.3s');
+      }
+    });
+  }
+
+  function reset(){
+    var r = confirm("Are you sure?");
+    if (r == true) {
+        Cookies.remove('mage2gen_module_id');
+      gen.render();
+      $('#code-jstree').jstree("destroy");
+    } else {
+        return;
+    }
+  }
+
+  function renderTree(target, data, openmodal){
+    $(target).jstree("destroy");
+    var file_contents = data.data['file_contents'];
+    $(target).on('changed.jstree', function (e, data) {
+        if(data.action == 'select_node' && data.node.id in file_contents){
+          $('#mage2-selected-file-name').html(data.node.original.path);
+          $('#mage2-selected-file').html(file_contents[data.node.id]);
+          $('#mage2-selected-file').each(function(i, block) {
+            hljs.highlightBlock(block);
+
+            // Expend code sidebar
+            if(openmodal) {
+              $("#modal-sidebar-filetree").jstree("deselect_all");
+              $("#modal-sidebar-filetree").jstree("select_node", '#' + data.node.id);
+              $('#code-preview').modal('toggle');
+            }
+          });
+        }
+      }).jstree({ 'core' : {
+        'data' : data.data['jstree'],
+        "themes" : { 'name': 'proton'},
+      }
+    });
+  }
+
+  function loadTree(){
+    if(gen.validate(false)){
+      var data = gen.getData();
+
+      module_id = Cookies.get('mage2gen_module_id');
+      url = '/files/';
+        if(typeof(module_id) !== 'undefined'){
+          url += module_id + '/';
+        }
+
+      csrfmiddlewaretoken = Cookies.get('csrftoken');
+      $.post(url, {csrfmiddlewaretoken: csrfmiddlewaretoken, 'mage2gen-data': JSON.stringify(data)}, function(data) {
+        if(data.status == 'success'){
+          if(typeof(data.data.module_id) !== 'undefined'){
+              Cookies.set('mage2gen_module_id', data.data.module_id, { expires: 30 });
+            }
+          renderTree('#code-jstree', data, true);
+          renderTree('#modal-sidebar-filetree', data, false);
+        } else {
+          alert('Something went wrong')
+        }
+      });
+    }
+  }
+
+  function generate(){
+    if(gen.validate(false)){
+      loadTree();
+    } else {
+      gen.validate(true);
+    }
+  }
+
+  $(function(){
+    $.ajax({ type: "GET",
+      url: "{% static 'html/snippets.html' %}",
+        dataType: 'text',
+        success : function(templates){
+          //console.log(templates);
+          gen = new ModuleRenderer(templates, '#mag2gen-container', {{snippets|safe}}, {
+            {% if config %}
+              module_config: {{config|safe}}
+            {% endif %}
+          }, '{{user.first_name}} {{user.last_name}}', currentMainVersion);
+
+          // Update file tree on change
+          var config_json = JSON.stringify(gen.getData());
+          gen.change(function(){
+            data = JSON.stringify(gen.getData());
+            if(data != config_json){
+              config_json = data;
+              loadTree();
+            }
+          });
+
+          {% if config %}
+            loadTree();
+          {% endif %}
+        }
+    });
+
+
+
+    $('#mage2gen-form').submit(function( event ) {
+      event.preventDefault();
+
+      if(gen.validate()){
+        var data = gen.getData();
+        csrfmiddlewaretoken = Cookies.get('csrftoken');
+
+        module_id = Cookies.get('mage2gen_module_id');
+
+        url = '/save/';
+        if(typeof(module_id) !== 'undefined'){
+          url += module_id + '/';
+        }
+
+        $.post(url, {csrfmiddlewaretoken: csrfmiddlewaretoken, 'mage2gen-data': JSON.stringify(data)}, function(data) {
+        if(data.status == 'success'){
+          module_id = data.data;
+          Cookies.set('mage2gen_module_id', module_id, { expires: 30 });
+
+          $('#zip-download-' + downloadType + '-link').attr('href', '/download/' + downloadType + '/' + module_id + '.zip');
+          $('#tweet-download-link').attr({
+              'href' : 'https://twitter.com/intent/tweet',
+              'data-text=' : 'Bla Bla'
+            });
+          if (downloadType == 'src') {
+            $('#tar-curl-download-' + downloadType).html('curl https://mage2gen.com/download/' + downloadType + '/' + module_id + '.tar | tar xzCk .');
+            $('#tar-wget-download-' + downloadType).html('wget https://mage2gen.com/download/' + downloadType + '/'+module_id+'.tar && tar xzfk '+module_id+'.tar && rm '+module_id+'.tar');
+
+          } else {
+            $('#tar-curl-download-' + downloadType).html('mkdir -p app/code && curl https://mage2gen.com/download/' + downloadType + '/' + module_id + '.tar | tar xzCk app/code');
+            $('#tar-wget-download-' + downloadType).html('wget https://mage2gen.com/download/' + downloadType + '/'+module_id+'.tar && mkdir -p app/code && tar xzfk '+module_id+'.tar -C app/code && rm '+module_id+'.tar');
+          }
+
+          $('#share-' + downloadType + '-link').html('https://mage2gen.com/load/' + module_id + '?main_version=' + currentMainVersion);
+
+          $('#download-' + downloadType + '-modal').modal('show');
+        } else {
+          alert('Something went wrong')
+        }
+      });
+
+        // Add Twitter share butto
+        jQuery('#tweet-container-src').empty();	// remove previous button
+        jQuery('#tweet-container-module').empty();	// remove previous button
+
+      twitter_url = "http://mage2gen.com/load/" + module_id;
+      twttr.widgets.createShareButton(
+        twitter_url,
+        document.getElementById("tweet-container-" + downloadType),
+        {
+          size: "large",
+          via: "Mage2gen",
+          related: "twitterapi,twitter",
+          text: "View my generated Magento 2 module here: ",
+          hashtags: "mage2gen, magento2"
+        }
+      );
+      }
+      return false;
+    });
+
+    // Submit button for form
+    $( "#mage2gen-form-submit-module" ).click(function() {
+      downloadType = 'module';
+      $( "#mage2gen-form" ).submit();
+    });
+    $( "#mage2gen-form-submit-src" ).click(function() {
+      downloadType = 'src';
+      $( "#mage2gen-form" ).submit();
+    });
+
+    $('#magento-generate-version').change(function(){
+        if(currentMainVersion != $(this).val()) {
+            window.location = '/?main_version=' + $(this).val();
+        }
+    });
+    $('#magento-generate-version').val(currentMainVersion);
+
+    // Load saved modules
+    loadUserModules();
+  });
+</script>
+{% endblock %}

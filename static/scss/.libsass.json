@@ -1,0 +1,17 @@
+{
+    "output": {
+        "dir":              "../css",
+        "structure":        "flat"
+    },
+    "compile": {    
+        "line-comments":    false,
+        "line-numbers":     false,     
+        "load-path":        false,         
+        "plugin-path":      false,       
+        "sourcemap":        true,         
+        "omit-map-comment": false,
+        "precision":        false,
+        "style":            "nested", // Comments allowed in `.libsass.json`, but not `*.sublime-settings`
+        "load-path":        "mage2gen.scss" // You DO NOT need this line
+    }
+}

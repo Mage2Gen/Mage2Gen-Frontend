@@ -1,0 +1,48 @@
+/**
+	* Modals
+	* --------------------------------------------------
+	*/
+
+	// Help modal
+	.help-modal {
+
+        .modal-dialog {
+			width: 90% !important;
+		}
+
+		.modal-body {
+			padding-bottom: 20px;
+
+			h1 {
+				margin-top: 5px;
+				font-size: 19px;
+			}
+
+			h2 {
+				margin-top: 5px;
+				font-size: 16px;
+			}
+		}
+	}
+
+	// Code preview modal
+	#code-preview {
+		.modal-dialog {
+			width: 90% !important;
+		}
+
+		.modal-body {
+			padding-bottom: 20px;
+		}
+	}
+
+	// Filetree modal
+	#code-preview {
+		#modal-sidebar-filetree {
+		
+		}
+
+		#modal-file-content { 
+		
+		}
+	}

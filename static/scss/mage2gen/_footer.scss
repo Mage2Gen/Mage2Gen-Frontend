@@ -1,0 +1,52 @@
+.footer {
+	background-color: $purple-light;
+	padding: 20px !important;
+	bottom: 0;
+	position: relative;
+	overflow: hidden;
+
+	.col-title {
+		color: #fff;
+		margin: 0 0 10px 0;
+	}
+
+
+	.sitemap,
+	.snippet-links {
+		margin-bottom: 20px;
+
+		ul {
+			padding-left:15px;
+
+			li {
+				color: #fff;
+
+				a {
+					color: #fff;
+				}
+			}
+		}
+	}
+
+	.powered {
+		margin-bottom: 20px;
+		color: #fff;
+
+		.brand-logo {
+			background-color: $white;
+			border-radius: 20px 20px;
+			display: inline-block;
+			padding: 10px;
+			vertical-align: top;
+
+			img {
+				display: inline-block;
+				height: 40px;
+			}
+		}
+	}
+
+	.seo-text {
+		color: #fff !important;
+	}
+}

@@ -1,0 +1,131 @@
+<html>
+
+
+
+<div id="snippet-container-tmpl">
+	{{! Start Snippet container Template}}
+	<section class="panel panel-primary snippet snippet-{{snippet_name}}">
+		<div onclick="clickTitleForToggle(this)" class="panel-heading" role="tab">
+			<h4 aria-expanded="true" class="panel-title collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#panel-{{snippet_name}}">
+				{{snippet_name}} <span class="pannel-badge-wrapper"><span class="badge">0</span>
+			</h4>
+		</div>
+		<div style="" aria-expanded="false" id="panel-{{snippet_name}}" class="panel-collapse collapse" role="tabpanel">
+			<div class="panel-body"></div>
+			<div class="panel-footer">
+				<div class="btn-group" role="group">
+					<button type="button" class="btn add-button">Add {{snippet_name}}</button>
+				</div>
+				<button type="button" class="btn help-button">Help</button>
+			</div>
+		</div>
+	</section>
+	{{! End: Snippet container Template ends here}}
+</div>
+
+
+<div id="snippet-help-popup-tmpl">
+	<div class="modal help-modal fade in" tabindex="-1" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span></button>
+					<h4 class="modal-title">{{snippet_name}} help</h4>
+				</div>
+				<div class="modal-body">
+					{{{description}}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="snippet-row-tmpl">
+	<div class="row" style="">
+		<div class="col-xs-10">
+			<div class="row">
+				<div class="snippet-fields"></div>
+			</div>
+		</div>
+		<div class="col-xs-2">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="form-group remove">
+						<button type="button" class="btn btn-default remove" data-dismiss="modal">×</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{#has_extra_params}}
+			<div class="col-xs-12">
+				<div class="row nested">
+					<div class="col-xs-12">
+					<div class="panel panel-default ">
+							<div onclick="clickTitleForToggle(this)" class="panel-heading" role="tab">
+								<h4 aria-expanded="true" class="panel-title" role="button" data-toggle="collapse" data-parent="#accordion">
+									Advanced options
+								</h4>
+							</div>
+							<div style="" aria-expanded="false" class="panel-collapse collapse" role="tabpanel">
+								<div class="snippet-fields-extra"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/has_extra_params}}
+	</div>
+</div>
+
+
+<div id="snippet-field-select-tmpl">
+	{{! Start: select input field}}
+		<div class="field-input {{bs_col}}">
+			<div class="form-group">
+				<label for="{{field_id}}" class="control-label">{{label}}
+					{{#show_help}}
+						<span class="badge badge-help" data-toggle="popover" data-placement="bottom" data-content="{{help_text}}">?</span>
+					{{/show_help}}
+				</label>
+				<select id="{{field_id}}" name="{{label}}" class="form-control" {{{multi}}}>
+						{{{options}}}
+				</select>
+				<div class="help-block"></div>
+			</div>
+		</div>
+	{{! End: select input field}}
+</div>
+
+<div id="snippet-field-text-tmpl">
+	{{! Start: text input field}}
+		<div class="field-input {{bs_col}}">
+			<div class="form-group">
+				<label for="{{field_id}}" class="control-label">{{label}}</label>
+				<input value="" id="{{field_id}}" name="{{label}}" class="form-control" type="text" placeholder="{{help_text}}">
+				<div class="help-block"></div>
+			</div>
+		</div>
+	{{! End: text input field}}
+</div>
+
+<div id="snippet-field-checkbox-tmpl">
+	{{! Start: checkbox input field}}
+		<div class="field-input {{bs_col}}">
+			<div class="form-group">
+				<label for="{{field_id}}" class="control-label">{{label}}
+					{{#show_help}}
+						<span class="badge badge-help" data-toggle="popover" data-placement="bottom" data-content="{{help_text}}">?</span>
+					{{/show_help}}
+				</label>
+				<input id="{{field_id}}" name="{{label}}" type="checkbox" title="Yes/no">
+				<label class="checkbox-label" for="{{field_id}}">Yes/no</label>
+				<div class="help-block"></div>
+			</div>
+		</div>
+	{{! End: checkbox input field}}
+</div>
+
+
+</html>

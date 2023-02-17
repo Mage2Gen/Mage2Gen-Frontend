@@ -1,0 +1,110 @@
+nav {
+    &.navbar {
+        min-height: 64px;
+        max-height: 64px;
+        font-size: 12px;
+        font-weight: bold;
+        @include box-shadow($panel-shadow);
+    }
+
+    .container-fluid {
+        background: $white;
+    }
+
+	.navbar-header {
+		margin: 0 !important;
+
+		@media screen and (max-width: 1200px) {
+			width: 100%;
+		}
+	}
+
+	.hamburger-menu {
+	    height: 64px;
+	    display: inline-block;
+	    vertical-align: middle;
+	    line-height: 64px;
+	    float: right;
+	}
+
+	#navbar-collapse:not(.in) {
+		@media screen and (max-width: 1200px) {
+		    display: none !important;
+	  	}	
+	}
+
+	.navbar-brand {
+		padding: 0  !important;
+		margin: 0 !important;
+
+		img {
+			display: inline-block;
+			height: 34px;
+		}
+
+		span {
+			display: inline-block;
+			line-height: 45px;
+			margin-top: 3px;
+		    vertical-align: middle;
+		}
+	}
+
+	a {
+        color: $darkgray-dark !important;
+        line-height: 64px !important;
+        padding-bottom: 0px !important;
+        padding-top: 0px !important;
+
+		&:hover {
+		    color: $purple-dark !important;
+		    span.stat-label {
+                color: $purple-dark !important;
+            }
+		}
+		span.icons-google {
+            height: 16px;
+            padding-right: 5px;
+            width: 16px;
+		}
+		&.github-stat {
+		    .counter {
+		        display: inline-block;
+		        width: 22px;
+		    }
+            &#github-stars {
+                img {
+                    margin-top: -3px;
+                }
+            }
+            span.stat-label {
+                color: #9B9B9B;
+            }
+		}
+	}
+
+	.navbar-text {
+	    color: $darkgray-dark !important;
+
+		&:hover {
+		    color: $purple-dark !important;
+		}
+	}
+
+	.nav-twitter-follow {
+	    height: 48px;
+	    margin-bottom: 10px;
+		padding-left: 10px;
+		padding-right: 10px;
+		padding-top: 23px;
+		overflow: hidden;
+		width: 235px;
+	}
+
+	.nav-seperator {
+        border: 1px solid #9B9B9B;
+        height: 24px;
+        margin-top: 20px;
+        width: 2px;
+	}
+}

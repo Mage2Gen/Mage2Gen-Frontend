@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Interactive command line{% endblock %}
+{% block description %}Interactive command line for Mage2Gen for generating Magento 2 modules{% endblock %}
+
+{% block content %}
+<div class="col-lg-6 col-centered">
+  <h1>Interactive command line</h1>
+
+  <p>
+    With the mage2gen command line tool you can interactively create and generate Magento 2 modules. If you have installed mage2gen for your whole system you can start it by running <strong><em>mage2gen</em></strong>. You will be asked to give the module package name, name and description.
+  </p>
+
+  <img class="img-fluid center-block" alt="Mage2Gen commandline" src="{% static 'img/mage2gen_commandline.png' %}">
+
+  <pre>
+    <code>
+bash> mage2gen
+Package name [Mage2gen]: Mage2gen
+Module name: Test
+Description: A Mage2Gen test module
+
+Type help or ? to list commands.
+(Mage2Gen)
+    </code>
+  </pre>
+
+  <h2>Installation</h2>
+
+  <p>
+    To install the Python library and the command line utility, run:
+  </p>
+
+  <blockquote>
+      sudo pip3 install mage2gen
+    </blockquote>
+
+  <h2>Help</h2>
+
+  <p>
+    You can use <strong><em>help</em></strong> or <strong><em>?</em></strong> to show available commands and <strong><em>help &lt;command&gt;</em></strong> to show command help description:
+  </p>
+
+  <pre>
+    <code>
+(Mage2Gen) help
+
+Documented commands (type help &lt;topic&gt;):
+========================================
+add  exit  generate  help  info  list  remove
+
+Undocumented commands:
+======================
+EOF
+
+(Mage2Gen) help add
+Add a snippet to module
+    </code>
+  </pre>
+
+  <h2>List snippets</h2>
+
+  <p>
+    With the <strong><em>list</em></strong> command you get a list of all the available snippets you can add to your module:
+  </p>
+
+  <pre>
+    <code>
+(Mage2Gen) list
+console cronjob controller system plugin shipping install language observer payment
+    </code>
+  </pre>
+
+  <h2>Add snippet</h2>
+
+  <p>
+    To add a snippet you can use the <strong><em>add &lt;snippet name&gt;</em></strong> command, you can auto-complete a snippet name with TAB:
+  </p>
+
+  <pre>
+    <code>
+(Mage2Gen) add console
+Action name*: test
+Short description*: Test log command
+    </code>
+  </pre>
+
+  <h2>Show added snippets</h2>
+
+  <p>
+    When you have added multiple snippets and you want to see which snippets are added to the module you can use the <strong><em>info</em></strong> command to show an overview:
+  </p>
+
+  <pre>
+    <code>
+(Mage2Gen) info
+
+Mage2gen/Test
+
+Consoles
+
+Index  Action name  Short description
+--------------------------------------------------------------------------------
+0      test         Test log command
+--------------------------------------------------------------------------------
+    </code>
+  </pre>
+
+  <h2>Remove snippet</h2>
+
+  <p>
+    If you want to remove an added snippet, you can use the <strong><em>remove &lt;snippet name&gt; &lt;index&gt;</em></strong> command, to remove the snippet from the module:
+  <p>
+
+  <pre>
+    <code>
+(Mage2Gen) remove console 0
+Removed Console snippet
+    </code>
+  </pre>
+
+  <h2>Generate module</h2>
+
+  <p>
+    When you are ready with you module and added the snippets you wanted to use you can generate the module with the <strong><em>generate</em></strong> command. If you are inside a Magento 2 project directory it will select the default path for the module:
+  </p>
+
+  <pre>
+    <code>
+(Mage2Gen) generate
+Generate path [/media/data/Downloads/magento2/app/code]*:
+Path does not exist, do you want to create it? [y/N]: y
+Module (Mage2gen/Test) generated to: /media/data/Downloads/magento2/app/code
+    </code>
+  </pre>
+</div>
+
+{% endblock %}

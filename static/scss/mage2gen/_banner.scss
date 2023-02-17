@@ -1,0 +1,41 @@
+/* experius_ad link */
+#banner {
+    background: #f8f8f8;
+    display: block;
+    height: 0;
+    width: 100%;
+    position: relative;
+    padding-bottom: 27.75%;
+
+    div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+    }
+
+    .content-one {
+        z-index: 4;
+        animation: fade-cycle 10s linear infinite;
+    }
+
+    .content-two {
+        z-index: 3;
+        animation: fade-cycle 10s linear 5s infinite;
+    }
+}
+
+@keyframes fade-cycle {
+    0%, 45%, 100% {
+        opacity: 1;
+    }
+    50%, 95% {
+        opacity: 0;
+    }
+}

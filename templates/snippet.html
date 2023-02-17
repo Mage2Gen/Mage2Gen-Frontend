@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{snippet.name}} snippet{% endblock %}
+{% block description %}Description and generated code example for {{snippet.name}} snippet{% endblock %}
+
+{% block content %}
+<div class="col-lg-6 col-centered">
+	<h2>{{snippet.name}}</h2>
+	<div class="snippet-description">
+		{{snippet.description|safe}}
+
+		<p>
+			Use the {{snippet.label}} snippet in the <a href="/" title="Mage2Gen Magento 2 module creator">Magento 2 module creator</a>.
+		</p>
+	</div>
+
+	<h3>Files</h3>
+	{% for filename, content in snippet.files %}
+		<h4>{{filename}}</h4>
+			<pre><code class="php code-block">{{content|safe}}</code></pre>
+	{% endfor %}
+</div>
+
+<script type="text/javascript">
+	$(function(){
+		$('.code-block').each(function(index, block){
+			hljs.highlightBlock(block);
+		});
+	});
+</script>
+{% endblock %}

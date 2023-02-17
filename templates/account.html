@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+<div class="col-lg-6 col-centered">
+  <h2>{{user.first_name}} {{user.last_name}}</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <h3>Custom License</h3>
+    <p>
+      In the License text the following tags can be used:
+    <p>
+
+    <ul>
+      <li><b>{copyright}</b> : The copyright name can be changed in the module creator setup</li>
+      <li><b>{module_name}</b> : The name of the generated module</li>
+      <li><b>{description}</b> : The description of the generated module</li>
+    </ul>
+
+    <h4>Short License text (Used in COPYING.txt)</h4>
+    <textarea class="form-control" name="license_short_text" rows="3">{{license_short_text}}</textarea>
+
+    <h4>Complete License</h4>
+    <textarea class="form-control" name="license_text" rows="18">{{license_text}}</textarea>
+    <input type="submit" value="save" class="btn btn-primary btn-block" />
+  </form>
+
+</div>
+{% endblock %}

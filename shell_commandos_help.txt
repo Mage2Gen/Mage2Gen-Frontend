@@ -1,0 +1,6 @@
+Environment activeren
+. env/bin/activate
+
+Python server activeren
+./manage.py runserver_plus
+
