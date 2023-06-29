@@ -60,7 +60,7 @@ def get_snippets(version=None, request=None):
                 ip = request.META['HTTP_X_FORWARDED_FOR']
             elif 'REMOTE_ADDR' in request.META:
                 ip = request.META['REMOTE_ADDR']
-        if request == 'skip' or (ip != False and (ip == '157.97.119.14' or ip == '127.0.0.1' or ip == '136.144.135.125')):
+        if request == 'skip' or (ip != False and (ip == '157.97.119.14' or ip == '127.0.0.1' or ip == '136.144.135.125' or ip == '161.51.68.158')):
             try:
                 module = importlib.import_module('experius')
                 snippets = snippets + module.Snippet.snippets()
