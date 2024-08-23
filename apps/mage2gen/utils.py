@@ -72,7 +72,7 @@ def get_snippets(version=None, request=None):
 
 def get_magento_versions():
     versions = []
-    for version in range(2, 25):
+    for version in range(3, 25):
         try:
             importlib.import_module(get_module_name(version))
             versions.append(version)
