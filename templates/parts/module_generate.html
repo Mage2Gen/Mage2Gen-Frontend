@@ -78,7 +78,6 @@
 
       <button class="btn btn-secondary btn-block create-new-module" onClick="reset()">Create new module</button>
       <button class="btn btn-secondary btn-block generate" onclick="generate();">Generate</button>
-      <button class="btn btn-primary btn-block save-and-download magento-version-{{selected_version}}"  type="submit" id="mage2gen-form-submit-src" name="submit">Save and download PWA Package Files</button>
       <button class="btn btn-success btn-block save-and-download" type="submit" id="mage2gen-form-submit-module" name="submit">Save and download Module</button>
       </div>
   </div>
@@ -217,80 +216,6 @@
   </div>
 </div>
 <!-- End Download Module pop modal -->
-
-<!-- Download Components pop modal -->
-<div class="modal fade" id="download-src-modal" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
-        <h4 class="modal-title">Download Magento 2 Package Source Files for PWA Studio</h4>
-      </div>
-      <div class="modal-body">
-        <h5>Method 1 - Direct download</h5>
-        <p>
-          Download your generated src here: <br/>
-          <a id='zip-download-src-link' class="btn btn btn-success btn-download-generated-module clearfix" href="">Download generated src</a>
-
-          <span class="button-separator">or</span>
-          <a class="bmc-button clearfix" target="_blank" href="https://www.buymeacoffee.com/7mGzHeOQE"><img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Download me a coffee "><span style="margin-left:5px">Download me a coffee</span></a>
-        </p>
-        <hr/>
-        <h5>Method 2 - Download and Extract command</h5>
-        <p>Or download and extract the package source files in your theme package:</p>
-        <p>Go to your package-root</p>
-        <p>
-        <ul>
-          <li>
-            <i>npm init @magento/pwa</i> <br /><b>cd &#60;project root&#62;</b></i>
-          </li>
-          <li>
-            <i>clone from https://github.com/magento/pwa-studio</i> <br /><b>cd &#60;project-root&#62;/packages/venia-ui/<br />note: change src directory to lib for latest version support</b>
-          </li>
-          <li>
-            <i>clone from https://github.com/Jordaneisenburger/fallback-studio</i> <br /><b>cd &#60;project-root&#62;/src/example-company/example-shop/</b>
-          </li>
-        </ul>
-        </p>
-
-        <pre id="tar-curl-download-src">
-          curl https://mage2gen.com/download/scr/latest.tar | tar xzCk .
-        </pre>
-
-        <p>If curl is not installed, the wget version:</p>
-
-        <pre id="tar-wget-download-src">
-          wget https://mage2gen.com/download/src/latest.tar &amp;&amp; tar xzfk latest.tar &amp;&amp; rm latest.tar
-        </pre>
-        <hr/>
-        <h5>Github</h5>
-        <p>
-          If you like Mage2Gen, please star or fork the project on Github.
-        </p>
-        <div>
-      <a aria-label="Star mage2gen/Mage2Gen on GitHub" data-count-aria-label="# stargazers on GitHub" data-count-api="/repos/mage2gen/Mage2Gen#stargazers_count" data-count-href="/mage2gen/Mage2Gen/stargazers" data-style="mega" data-icon="octicon-star" href="https://github.com/mage2gen/Mage2Gen" class="github-button">Star</a>
-      <a aria-label="Fork mage2gen/Mage2Gen on GitHub" data-count-aria-label="# forks on GitHub" data-count-api="/repos/mage2gen/Mage2Gen#forks_count" data-count-href="/mage2gen/Mage2Gen/network" data-style="mega" data-icon="octicon-repo-forked" href="https://github.com/mage2gen/Mage2Gen/fork" class="github-button">Fork</a>
-        </div>
-
-        <hr/>
-        <h5>Mage2Gen share link</h5>
-        <p>
-          <pre id="share-src-link"></pre>
-        </p>
-
-        <hr/>
-        <h5>Tweet your module!</h5>
-        <p>
-          Tweet the download link to your module directly!
-        </p>
-        <div id="tweet-container-src"></div>
-      </div>
-      <div class="modal-footer">
-      </div>
-    </div>
-  </div>
-</div>
-<!-- End Download Components pop modal -->
 
 
 <script type="text/javascript">

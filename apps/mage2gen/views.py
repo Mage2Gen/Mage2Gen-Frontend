@@ -297,9 +297,6 @@ class DownloadModule(View):
 						if not match and download_type == 'module':
 							rel_path = re_path_comp.match(path).group(1)
 							ziph.write(path, rel_path)
-						elif match and download_type == 'src':
-							rel_path = match.group(1)
-							ziph.write(path, rel_path)
 			zipf = zipfile.ZipFile(stream_file, 'w', zipfile.ZIP_DEFLATED)
 			zipdir(temp_path, zipf)
 			zipf.close()
@@ -314,9 +311,6 @@ class DownloadModule(View):
 						match = re_filename.match(path)
 						if not match and download_type == 'module':
 							rel_path = re_path_comp.match(path).group(1)
-							tar.add(path, rel_path)
-						elif match and download_type == 'src':
-							rel_path = match.group(1)
 							tar.add(path, rel_path)
 
 		utils.tmp_remove(temp_path)
@@ -366,19 +360,13 @@ class ModuleFileStructureJsendView(JsendView):
 				dir_id = '_'.join(dir_list)
 				src_dir_id = '{}-src'.format(dir_id)
 				parent_id = '_'.join(dir_list[:-1])
-				parent_src_id = '{}-{}'.format(parent_id, 'src')
 				name = dir_list[-1]
-				src_name = name
 				if not parent_id:
 					name = 'app/code/{}/{}'.format(module.package, module.name)
 					parent_id = '#'
-					parent_src_id = '#'
-					src_name = 'package-root'
 
 				icon = False
-				if 'components' in dir_list or 'RootComponents' in dir_list or 'queries' in dir_list:
-					icon = static('img/folder-react-components.svg')
-				elif 'js' in dir_list:
+				if 'js' in dir_list:
 					icon = static('img/folder-javascript.svg')
 				elif 'layout' in dir_list or 'ui_component' in dir_list:
 					icon = static('img/folder-layout.svg')
@@ -395,20 +383,11 @@ class ModuleFileStructureJsendView(JsendView):
 						icon_path = static('img/folder-php.svg')
 					jstree.append({'id': dir_id, 'parent': parent_id, 'text': name, 'state': {'opened': 1 }, 'icon': icon_path})
 
-				if data.get('magento_version', '4') == 4 and ('src' in dir_list or 'lib' in dir_list or parent_src_id == '#'):
-					if not icon:
-						icon_path = static('img/folder-views.svg')
-
-					jstree.append({'id': src_dir_id, 'parent': parent_src_id, 'text': src_name, 'state': {'opened': 1 }, 'icon': icon_path})
-
 				for fname in fileList:
 					dir_path = dir_list[1:]
 					file_path = fname
 					if dir_path:
 						file_path = '{}/{}'.format("/".join(dir_path), fname)
-
-					if 'src' in dir_list or 'lib' in dir_list:
-						dir_id = src_dir_id
 
 					full_file_path = os.path.join(dirName, fname)
 					file_id = '{}_{}'.format(dir_id, fname)
