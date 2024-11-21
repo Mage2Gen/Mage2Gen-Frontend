@@ -31,6 +31,11 @@ class CommandlineView(TemplateView):
 	template_name = 'commandline.html'
 
 
+def ads_txt_view(request):
+    with open(os.path.join(settings.STATIC_ROOT, 'ads.txt')) as file:
+        file_content = file.readlines()
+    return HttpResponse(file_content, content_type="text/plain")
+
 class SnippetsView(TemplateView):
 	template_name = 'snippets.html'
 

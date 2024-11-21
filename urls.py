@@ -3,11 +3,11 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
-from django.urls import reverse
+from django.urls import reverse, path
 from mage2gen import Snippet
 from django.conf.urls.static import static
 
-from apps.mage2gen.views import (Mage2GenView, 
+from apps.mage2gen.views import (Mage2GenView, ads_txt_view,
     DownloadModule, 
     SaveModuleJsendView, 
     ModuleFileStructureJsendView, 
@@ -45,6 +45,7 @@ class SnippetSitemaps(Sitemap):
         return reverse('snippet', kwargs={'snippet_name': item})
 
 urlpatterns = [
+    path("ads.txt", ads_txt_view),
 	url(r'^grappelli/', include('grappelli.urls')),
     url(r'^mage_admin/', admin.site.urls),
 
