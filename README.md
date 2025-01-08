@@ -76,6 +76,7 @@ docker build -t mage2gen .
 ```
 
 ```
+cp settings/dev.py.sample settings/dev.py
 cp settings/local.py.sample settings/local.py
 ```
 

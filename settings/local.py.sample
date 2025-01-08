@@ -1,0 +1,9 @@
+MYSQL_DB = ''
+MYSQL_USERNAME = ''
+MYSQL_PASSWORD = ''
+MYSQL_HOST = ''
+MYSQL_PORT = ''
+
+SECRET_KEY = 'sdafdsfas'
+USE_SQLITE = 1
+MODULE_GENERATION_PATH = 'path to magento app/code'
