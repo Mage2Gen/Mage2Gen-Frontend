@@ -5,7 +5,7 @@ from .base import *
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '/var/run/memcached/memcached.sock',
+        'LOCATION': '127.0.0.1:11211',
     }
 }
 
