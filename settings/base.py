@@ -25,10 +25,15 @@ ALLOWED_HOSTS = ['*', 'mage2gen.com']
 TIME_ZONE = 'Europe/Amsterdam'
 USE_TZ = True
 USE_I18N = True
-USE_L10N = True
-LANGUAGE_CODE = 'en-en'
+LANGUAGE_CODE = 'en'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 SECRET_KEY = local.SECRET_KEY
+CSRF_TRUSTED_ORIGINS = [
+    'https://mage2gen.com',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+]
 
 INSTALLED_APPS = (
     'grappelli',
@@ -163,7 +168,7 @@ CACHES = {
 #==============================================================================
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+        'ENGINE': 'django.db.backends.postgresql', 
         'NAME': local.MYSQL_DB,
         'USER': local.MYSQL_USERNAME,
         'PASSWORD': local.MYSQL_PASSWORD,

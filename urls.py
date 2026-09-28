@@ -1,9 +1,8 @@
-from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.sitemaps import Sitemap
-from django.urls import reverse, path
+from django.urls import reverse, path, re_path, include
 from mage2gen import Snippet
 from django.conf.urls.static import static
 
@@ -46,44 +45,42 @@ class SnippetSitemaps(Sitemap):
 
 urlpatterns = [
     path("ads.txt", ads_txt_view),
-	url(r'^grappelli/', include('grappelli.urls')),
-    url(r'^mage_admin/', admin.site.urls),
+    path("grappelli/", include("grappelli.urls")),
+    path("mage_admin/", admin.site.urls),
 
-    url('', include('social_django.urls', namespace='social')),
+    path("", include("social_django.urls", namespace="social")),
 
-	# Sitemap
-	url(r'^sitemap\.xml$', sitemap, {'sitemaps': {'pages': StaticPageSitemaps, 'snippets': SnippetSitemaps}},
-		    name='django.contrib.sitemaps.views.sitemap'),
+    path("sitemap.xml", sitemap, {"sitemaps": {"pages": StaticPageSitemaps, "snippets": SnippetSitemaps}},
+         name="django.contrib.sitemaps.views.sitemap"),
 
-	# Account page
-	url(r'^account/$', AccountView.as_view(), name="account"),
+    path("account/", AccountView.as_view(), name="account"),
 
-    # cached version
-    # url(r'^$', cache_page(60 * 60)(Mage2GenView.as_view()), name='home'),
-    # url(r'^about/$', cache_page(60 * 60)(AboutView.as_view()) , name='about'),
-    # url(r'^commandline/$', cache_page(60 * 60)(CommandlineView.as_view()), name='commandline'),
-    # url(r'^snippets/$', cache_page(60 * 60)(SnippetsView.as_view()), name='snippets'),
-    # url(r'^snippets/(?P<snippet_name>[\w-]+)/$', cache_page(60 * 60)(SnippetView.as_view()) , name='snippet'),
+    path("", Mage2GenView.as_view(), name="home"),
+    path("about/", AboutView.as_view(), name="about"),
+    path("commandline/", CommandlineView.as_view(), name="commandline"),
+    path("snippets/", SnippetsView.as_view(), name="snippets"),
+    path("snippets/<slug:snippet_name>/", SnippetView.as_view(), name="snippet"),
 
-    url(r'^$', Mage2GenView.as_view(), name='home'),
-    url(r'^about/$', AboutView.as_view() , name='about'),
-    url(r'^commandline/$', CommandlineView.as_view(), name='commandline'),
-    url(r'^snippets/$', SnippetsView.as_view(), name='snippets'),
-    url(r'^snippets/(?P<snippet_name>[\w-]+)/$', SnippetView.as_view() , name='snippet'),
+    path("load/<slug:config_id>/", Mage2GenView.as_view(), name="home_load"),
+    path("save/", SaveModuleJsendView.as_view(), name="save"),
+    path("save/<slug:config_id>/", SaveModuleJsendView.as_view(), name="resave"),
+    re_path(
+        r"^download/(?P<download_type>[\w\d-]+)/(?P<config_id>[\w\d-]+)\.(?P<extension>\w+)$",
+        DownloadModule.as_view(),
+        name="download",
+    ),
+    path("files/", ModuleFileStructureJsendView.as_view(), name="file_structure"),
+    path("files/<slug:config_id>/", ModuleFileStructureJsendView.as_view(), name="file_structure_load"),
 
-    url(r'^load/(?P<config_id>[\w\d-]+)/$', Mage2GenView.as_view(), name='home_load'),
-    url(r'^save/$', SaveModuleJsendView.as_view(), name='save'),
-    url(r'^save/(?P<config_id>[\w\d-]+)/$', SaveModuleJsendView.as_view(), name='resave'),
-    url(r'^download/(?P<download_type>[\w\d-]+)/(?P<config_id>[\w\d-]+)\.(?P<extension>\w+)', DownloadModule.as_view(), name='download'),
-    url(r'^files/$', ModuleFileStructureJsendView.as_view(), name='file_structure'),
-    url(r'^files/(?P<config_id>[\w\d-]+)/$', ModuleFileStructureJsendView.as_view(), name='file_structure_load'),
+    path("api/", include(("apps.mage2gen.api.urls", "apps.mage2gen.api"), namespace="rest_framework")),
 
-    # API
-    url(r'^api/', include(('apps.mage2gen.api.urls','apps.mage2gen.api'), namespace='rest_framework')),
-
-    url(r'^user/modules/$', UserModulesJsendView.as_view(), name='file_structure'),
+    path("user/modules/", UserModulesJsendView.as_view(), name="user_modules"),
 ]
 
-#Makes media files work on dev server
 if settings.DEBUG:
-	urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    try:
+        import debug_toolbar
+        urlpatterns += [path("__debug__/", include(debug_toolbar.urls))]
+    except ImportError:
+        pass

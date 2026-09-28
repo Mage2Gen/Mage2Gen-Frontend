@@ -1,5 +1,6 @@
 #!/bin/sh
-cd /usr/app/src
+set -e
+cd /usr/src/app
 
 python3 manage.py migrate --noinput
 python3 manage.py createcachetable

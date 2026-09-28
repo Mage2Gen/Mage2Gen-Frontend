@@ -1,85 +1,53 @@
-###Installing requirements on Debian/Ubuntu
+# Mage2Gen Frontend
 
-	sudo apt-get install python3-pip python-virtualenv
-    sudo apt-get install pip
+Django 6.1 / Python 3.14 app that generates Magento 2 modules.
 
-##**Project Setup**
+## Local setup with Docker Compose
 
-**Create virtualenv**
-Navigate to the root of the project folder. Run the following command:
-
-    virtualenv --python=/usr/bin/python3 env
-
-**Activate virtualenv**
-
-    . env/bin/activate
-    
-**Install requirements with pip**
-
-    pip install -r requirements.txt
-
-**create settings/local.py*
-```
-MYSQL_DB = ''
-MYSQL_USERNAME = ''
-MYSQL_PASSWORD = ''
-MYSQL_HOST = ''
-MYSQL_PORT = ''
-
-SECRET_KEY = 'sdafdsfas'
-USE_SQLITE = 1
-MODULE_GENERATION_PATH = 'path to magento app/code'
-```
-
-**Create database tables by running this command:**
-if error then comment line 21
-
-	python manage.py migrate
-
-**Caching setup**
-Default cache backend settings is the database, for creating the cache table run the following command
-
-	python manage.py createcachetable
-
-**Admin account**
-Create user account with admin right for accessing the admin panel:
-
-	python manage.py createsuperuser
-
-##**Running local**
-
-0) Navigate in the project root
-
-1) Activate local environment 
-
-   . ../env/bin/activate
-    
-2) Starting the webserver:
-    
-    python manage.py runserver_plus
-    
-3) Open the browser and navigate to http://localhost:8000/
-
-
-
-node-sass scss/ --output css
-
-
-##**Running and developing with docker**
+1. Clone the Mage2Gen cores used by the snippet generator:
 
 ```
 sh pull_mage2gen_core.sh
 ```
 
-```
-docker build -t mage2gen .
-```
+2. Create local settings from the samples:
 
 ```
-cp settings/dev.py.sample settings/dev.py
 cp settings/local.py.sample settings/local.py
+cp settings/dev.py.sample settings/dev.py
 ```
 
+`settings/local.py` reads host `127.0.0.1:5433` by default (Postgres published by Compose). Inside the `web` container, Compose sets `MYSQL_HOST=db` and `MYSQL_PORT=5432`.
+
+3. Start Postgres 16, memcached, and the app:
+
 ```
-docker run -it --rm --name mage2gen -p 8000:8000 -v $(pwd):/usr/app/src mage2gen
+docker compose up --build
 ```
+
+4. Open http://localhost:8000/
+
+Admin is at `/mage_admin/`. Create a superuser from the host venv or with:
+
+```
+docker compose exec web python3 manage.py createsuperuser
+```
+
+## Local setup with a virtualenv
+
+Requires Python 3.12 or newer (3.14 recommended) and the Compose Postgres service.
+
+```
+python3.14 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements.txt
+cp settings/local.py.sample settings/local.py
+cp settings/dev.py.sample settings/dev.py
+docker compose up -d db
+python manage.py migrate
+python manage.py createcachetable
+python manage.py createsuperuser
+python manage.py runserver_plus
+```
+
+Then open http://localhost:8000/

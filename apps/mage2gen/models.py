@@ -40,7 +40,7 @@ class BaseModel(models.Model):
 class Module(BaseModel):
 	id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='modules', null=True, blank=True, on_delete=models.SET_NULL)
-	config = JSONField(default={}, load_kwargs={'object_pairs_hook': collections.OrderedDict})
+	config = JSONField(default=dict, load_kwargs={'object_pairs_hook': collections.OrderedDict})
 	package_name = models.CharField(max_length=128, default='')
 	name = models.CharField(max_length=128, default='')
 	download_count = models.IntegerField(default=0)
