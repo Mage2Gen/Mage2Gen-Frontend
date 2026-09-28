@@ -1,26 +1,23 @@
-Django==3.1.4
-psycopg2-binary==2.9.10
-django-grappelli==2.14.4
-social-auth-app-django==4.0.0
-social-auth-core==4.0.2
-django_compressor==4.4
-jsonfield==3.1.0
-mage2gen
-django-jsend
-docutils
-django-htmlmin
-python-memcached
-python-social-auth
+Django==6.1.1
+psycopg[binary]==3.3.6
+django-grappelli==5.0.0
+social-auth-app-django==6.0.1
+social-auth-core==5.1.1
+django-compressor==4.6.0
+jsonfield==3.2.0
+mage2gen==2.3.3
+django-jsend==0.4
+docutils==0.22.4
+pymemcache==4.0.0
 
 #API
-djangorestframework==3.12.2
-djangorestframework-jwt==1.11.0
+djangorestframework==3.18.1
 
-#Debuging
-colorlog
-django-debug-toolbar==3.2
-django-extensions==3.1.0
-Werkzeug==2.0.3
+#Debugging
+colorlog==6.10.1
+django-debug-toolbar==8.0.0
+django-extensions==4.1
+Werkzeug==3.1.9
 
-ujson
-Pillow==9.5.0
+ujson==5.11.0
+Pillow==12.3.0

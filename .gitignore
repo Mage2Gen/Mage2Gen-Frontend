@@ -4,6 +4,8 @@ src/var/
 env/
 
 /settings/local.py
+/settings/dev.py
+/docker-compose.override.yml
 /media/
 /tmp/
 /mage2gen2
@@ -15,4 +17,5 @@ env/
 *.log
 *.pid
 .idea
+.playwright-mcp/
 Mage2genDatabase

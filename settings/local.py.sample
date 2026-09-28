@@ -1,9 +1,11 @@
-MYSQL_DB = ''
-MYSQL_USERNAME = ''
-MYSQL_PASSWORD = ''
-MYSQL_HOST = ''
-MYSQL_PORT = ''
+import os
 
-SECRET_KEY = 'sdafdsfas'
-USE_SQLITE = 1
-MODULE_GENERATION_PATH = 'path to magento app/code'
+MYSQL_DB = os.getenv('MYSQL_DB', 'mage2gen')
+MYSQL_USERNAME = os.getenv('MYSQL_USERNAME', 'mage2gen')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'mage2gen')
+MYSQL_HOST = os.getenv('MYSQL_HOST', '127.0.0.1')
+MYSQL_PORT = os.getenv('MYSQL_PORT', '5433')
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'change-me-in-local-py')
+USE_SQLITE = int(os.getenv('USE_SQLITE', '0'))
+MODULE_GENERATION_PATH = os.getenv('MODULE_GENERATION_PATH', 'tmp/generated')
