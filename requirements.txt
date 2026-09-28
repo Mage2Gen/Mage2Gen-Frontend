@@ -1,8 +1,9 @@
 Django==3.1.4
-psycopg2-binary==2.8.2
-django-grappelli
+psycopg2-binary==2.9.10
+django-grappelli==2.14.4
 social-auth-app-django==4.0.0
-django_compressor
+social-auth-core==4.0.2
+django_compressor==4.4
 jsonfield==3.1.0
 mage2gen
 django-jsend
@@ -22,4 +23,4 @@ django-extensions==3.1.0
 Werkzeug==2.0.3
 
 ujson
-Pillow==8.0.1
+Pillow==9.5.0
