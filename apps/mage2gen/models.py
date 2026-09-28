@@ -11,6 +11,19 @@ from django.conf import settings
 from . import utils
 
 
+def _snippet_add_kwargs(snippet_class, kwargs):
+	"""Fill snippet add() args that params() marks optional but the signature requires."""
+	add_kwargs = dict(kwargs or {})
+	for param in snippet_class.params():
+		if add_kwargs.get(param.name) not in (None, ''):
+			continue
+		if param.default is not None:
+			add_kwargs[param.name] = param.default
+		elif getattr(param, 'choises', None):
+			add_kwargs[param.name] = param.choises[0][0]
+	return add_kwargs
+
+
 class BaseModel(models.Model):
 	"""Base model for all Merlin models"""
 	
@@ -88,6 +101,6 @@ class Module(BaseModel):
 				for index, kwargs in enumerate(kwargss):
 					if index >= 100: # prevent huge modules
 						break
-					snippet_object.add(**kwargs)
+					snippet_object.add(**_snippet_add_kwargs(SnippetClass, kwargs))
 
 		return module
