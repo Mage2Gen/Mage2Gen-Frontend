@@ -50,6 +50,40 @@ nav {
 		}
 	}
 
+	form {
+		margin: 0;
+	}
+
+	button.sign-in-google {
+		background: transparent;
+		border: 0;
+		color: $darkgray-dark !important;
+		cursor: pointer;
+		font: inherit;
+		line-height: 64px !important;
+		padding: 0 15px !important;
+
+		&:hover,
+		&:focus {
+			background: transparent;
+			color: $purple-dark !important;
+			outline: none;
+		}
+
+		span.icons-google {
+			display: inline-block;
+			height: 16px;
+			padding-right: 5px;
+			width: 16px;
+
+			img {
+				height: 16px;
+				vertical-align: middle;
+				width: 16px;
+			}
+		}
+	}
+
 	a {
         color: $darkgray-dark !important;
         line-height: 64px !important;

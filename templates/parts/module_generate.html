@@ -94,10 +94,13 @@
     <div class="panel-body" id="previous-saved-modules">
       {% if not user.is_authenticated %}
         Login to save and load generated modules.
-        <a href="{% url 'social:begin' 'google-oauth2' %}" class="sign-in-google btn">
-          <span class="icons-google"><img src="{% static 'img/google.svg' %}" /></span>
-          Sign in with Google
-        </a>
+        <form method="post" action="{% url 'social:begin' 'google-oauth2' %}">
+          {% csrf_token %}
+          <button type="submit" class="sign-in-google btn">
+            <span class="icons-google"><img src="{% static 'img/google.svg' %}" /></span>
+            Sign in with Google
+          </button>
+        </form>
       {% endif %}
       </div>
   </div>
