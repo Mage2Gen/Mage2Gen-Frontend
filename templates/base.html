@@ -103,10 +103,13 @@
                 </li>
               {% else %}
                 <li>
-                  <a href="{% url 'social:begin' 'google-oauth2' %}" class="sign-in-google">
-                    <span class="icons-google"><img src="{% static 'img/google.svg' %}" /></span>
-                    Sign in with Google
-                  </a>
+                  <form method="post" action="{% url 'social:begin' 'google-oauth2' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="sign-in-google">
+                      <span class="icons-google"><img src="{% static 'img/google.svg' %}" /></span>
+                      Sign in with Google
+                    </button>
+                  </form>
                 </li>
                 <!--<li class="dropdown" id="introjs-login">-->
                   <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sign In <span class="caret"></span></a>-->

@@ -2660,6 +2660,31 @@ nav .navbar-brand {
     margin-top: 3px;
     vertical-align: middle; }
 
+nav form {
+  margin: 0; }
+
+nav button.sign-in-google {
+  background: transparent;
+  border: 0;
+  color: #4A4A4A !important;
+  cursor: pointer;
+  font: inherit;
+  line-height: 64px !important;
+  padding: 0 15px !important; }
+  nav button.sign-in-google:hover, nav button.sign-in-google:focus {
+    background: transparent;
+    color: #585EAA !important;
+    outline: none; }
+  nav button.sign-in-google span.icons-google {
+    display: inline-block;
+    height: 16px;
+    padding-right: 5px;
+    width: 16px; }
+    nav button.sign-in-google span.icons-google img {
+      height: 16px;
+      vertical-align: middle;
+      width: 16px; }
+
 nav a {
   color: #4A4A4A !important;
   line-height: 64px !important;
